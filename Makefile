@@ -4,6 +4,7 @@ OPENAMP_ROOT     := $(PWD)
 BUILD            ?= $(OPENAMP_ROOT)/.build
 OS               ?= baremetal
 PLAT             ?= zc702evk
+ROLE             ?= remote
 
 include porting/os/$(OS)/platforms/$(PLAT)/Makefile.platform
 
@@ -33,7 +34,7 @@ CFLAGS += $(INCLUDES)
 OPENAMP_LIB := $(BUILD)/libopen_amp.a
 OPENAMP_RPC_LIB := $(BUILD)/libopen_amp_rpc.a
 
-OPENAMP_C_SRCFILES += \
+OPENAMP_C_SRCFILES = \
 $(wildcard remoteproc/*.c) \
 $(wildcard virtio/*.c) \
 $(wildcard rpmsg/*.c) \
@@ -53,10 +54,20 @@ OPENAMP_OBJFILES := $(patsubst %.c, $(BUILD)/%.o, $(OPENAMP_C_SRCFILES)) $(patsu
 
 OPENAMP_DEPFILES := $(patsubst %.c, $(BUILD)/%.d, $(OPENAMP_C_SRCFILES)) $(patsubst %.S, $(BUILD)/%.d, $(OPENAMP_AS_SRCFILES))
 
-all: $(OPENAMP_LIB)
+OPENAMP_RPC_C_SRCFILES = \
+$(wildcard proxy/remote/rpmsg_retarget/*.c)
+
+OPENAMP_RPC_OBJFILES := $(patsubst %.c, $(BUILD)/%.o, $(OPENAMP_RPC_C_SRCFILES))
+
+OPENAMP_RPC_DEPFILES := $(patsubst %.c, $(BUILD)/%.d, $(OPENAMP_RPC_C_SRCFILES))
+
+all: $(OPENAMP_LIB) $(OPENAMP_RPC_LIB)
 
 $(OPENAMP_LIB): $(OPENAMP_OBJFILES)
 	$(AR) -r $@ $(OPENAMP_OBJFILES)
+
+$(OPENAMP_RPC_LIB): $(OPENAMP_RPC_OBJFILES)
+	$(AR) -r $@ $(OPENAMP_RPC_OBJFILES)
 
 $(BUILD)/%.o:%.c
 	mkdir -p $(dir $@)

@@ -1,5 +1,5 @@
 #include "open_amp.h"
-#include "rpmsg_retarget.h"
+#include "rpmsg_retarget/rpmsg_retarget.h"
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
@@ -12,11 +12,9 @@
  *	such as _open, _read, _write, _close.
  *************************************************************************/
 static struct _rpc_data* rpc_data;
-static unsigned int rpc_data_synclock = 0;
 int get_response = 0;
 
 int send_rpc(void *data, int len);
-static int rpc_count=0;
 
 void rpc_cb(struct rpmsg_channel *rtl_rp_chnl, void *data, int len, void * priv,
 			unsigned long src) {
