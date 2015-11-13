@@ -14,7 +14,7 @@ CXX              = $(CROSS)g++
 AS               = $(CROSS)as
 AR               = $(CROSS)ar
 LD               = $(CROSS)gcc
-INCLUDE          := 
+INCLUDE          := -I"../../../../include"
 RM               := rm -f
 CP               := cp
 
