@@ -3,10 +3,10 @@
 OPENAMP_ROOT     := $(PWD)
 BUILD            ?= $(OPENAMP_ROOT)/.build
 OS               ?= baremetal
-PLAT             ?= zc702evk
+MACHINE             ?= zynq7
 ROLE             ?= remote
 
-include porting/os/$(OS)/platforms/$(PLAT)/Makefile.platform
+include porting/os/$(OS)/machine/$(MACHINE)/Makefile.platform
 
 ifeq ($(OS),baremetal)
 CFLAGS +=-D"ENV=1"
@@ -27,7 +27,7 @@ ifeq ($(LINUXREMOTE),1)
 CFLAGS+=-D"OPENAMP_REMOTE_LINUX_ENABLE"
 endif
 
-INCLUDES := -I"$(OPENAMP_ROOT)/include" -I"$(OPENAMP_ROOT)/include/porting/os/$(OS)/platforms/$(PLAT)"
+INCLUDES := -I"$(OPENAMP_ROOT)/include" -I"$(OPENAMP_ROOT)/include/porting/os/$(OS)/platforms/$(MACHINE)"
 CFLAGS += $(INCLUDES)
 
 
@@ -43,12 +43,12 @@ $(wildcard common/llist/*.c) \
 $(wildcard common/shm/*.c) \
 $(wildcard common/firmware/*.c) \
 $(wildcard porting/os/$(OS)/*.c) \
-$(wildcard porting/os/$(OS)/platforms/$(PLAT)/*.c) \
-$(wildcard porting/platforms/$(PLAT)/remoteproc/*.c) \
-$(wildcard porting/platforms/$(PLAT)/*.c)
+$(wildcard porting/os/$(OS)/machine/$(MACHINE)/*.c) \
+$(wildcard porting/machine/$(MACHINE)/remoteproc/*.c) \
+$(wildcard porting/machine/$(MACHINE)/*.c)
 
 OPENAMP_AS_SRCFILES += \
-$(wildcard porting/$(PLAT)/*.S)
+$(wildcard porting/$(MACHINE)/*.S)
 
 OPENAMP_OBJFILES := $(patsubst %.c, $(BUILD)/%.o, $(OPENAMP_C_SRCFILES)) $(patsubst %.S, $(BUILD)/%.o, $(OPENAMP_AS_SRCFILES))
 

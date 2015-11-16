@@ -1,43 +1,46 @@
 
 # Include commons make file to get platform and tool chain specific variables.
 
+VPATH := $(PWD)
+OPENAMP_ROOT     := $(PWD)/..
+BUILD            ?= $(OPENAMP_ROOT)/.build/apps
+OS               ?= baremetal
+PLAT             ?= zc702evk
+ROLE             ?= remote
 
-include ../Makefile.commons
+include ../porting/os/$(OS)/platforms/$(PLAT)/Makefile.platform
 
-all:
 ifeq ($(OS),baremetal)
-ifeq ($(ROLE),remote)
-	make  -C samples/remote/baremetal/matrix_multiply -f make
-	make  -C tests/remote/baremetal/echo_test -f make
-	#make  -f tests/remote/baremetal/func_test_suite/make
-	make  -C samples/remote/baremetal/rpc_demo -f make
+ifeq ($(ROLE),master)
+CFLAGS+=-D"MASTER=1"
+else
+CFLAGS+=-D"MASTER=0"
 endif
 endif
 
-linux_remote:
-	make  -f samples/master/baremetal/matrix_multiply/make
-	make  -f tests/master/baremetal/echo_test/make
-	make  -f tests/master/baremetal/func_test_suite/make
+LDFLAGS += -L$(OPENAMP_ROOT)/.build
+LIBS := -lopen_amp
+
+INCLUDE := -I$(OPENAMP_ROOT)/include -I$(OPENAMP_ROOT)/include/porting/os/$(OS)/platforms/$(PLAT) -Isamples/common -Isamples/common/$(PLAT)
+
+include Makefile.objs
+
+$(foreach o,$(obj-y),$(if $($o-objs),$(eval $(BUILD)/$o-objs := $(addprefix $(BUILD)/,$($o-objs)))))
+
+all: $(addprefix $(BUILD)/,$(filter %firmware,$(obj-y)))
+
+$(BUILD)/%.o: %.c
+	mkdir -p $(dir $@)
+	$(CC) $(ABC) $(CFLAGS) $(ARCH_CFLAGS) $(INCLUDE) $($(patsubst %.c,%.o,$<)-cflags) $($(dir $<)firmware-cflags) -c $< -o $@
+
+$(BUILD)/%.o: %.S
+	mkdir -p $(dir $@)
+	$(AS) $(ARCH_ASFLAGS) $(INCLUDE) $< -o $@
 
 clean:
-ifeq ($(OS),baremetal)
-ifeq ($(ROLE),remote)
-	make  -C samples/remote/baremetal/matrix_multiply -f make clean
-	make  -C tests/remote/baremetal/echo_test -f make clean
-	#make  -f tests/remote/baremetal/func_test_suite/make clean
-	make  -C samples/remote/baremetal/rpc_demo -f make clean
-endif
-endif
+	rm -rf $(BUILD)
 
-clean_linux_remote:
-	make  -f samples/master/baremetal/matrix_multiply/make clean
-	make  -f tests/master/baremetal/echo_test/make clean
-	make  -f tests/master/baremetal/func_test_suite/make clean
-
-post-build:
-	-@echo ' '
-
-secondary-outputs:
-
-PHONY: all clean dependents
-.SECONDARY: post-build
+.SECONDEXPANSION:
+$(BUILD)/%firmware: $$($$@-objs) $(addprefix $(BUILD)/,$(common-obj-y))
+	echo "$@: $^" 
+	$(LD) -Wl,-Map=$(dir $@)/firmware.map -Wl,--gc-sections $(LDFLAGS) $($(patsubst $(BUILD)/,,$@)-ldflags) -o $@ -Wl,--start-group $^ $(LIBS) $($(patsubst $(BUILD)/,,$@)-libs) -Wl,--end-group
