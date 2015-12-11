@@ -216,3 +216,5 @@ struct hil_proc proc_table []=
     }
 };
 
+const int proc_table_size = sizeof (proc_table)/sizeof(struct hil_proc);
+
