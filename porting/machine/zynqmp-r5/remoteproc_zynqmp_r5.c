@@ -73,12 +73,17 @@ extern void platform_dcache_all_flush();
 extern void ipi_register_interrupt(unsigned long ipi_base_addr, unsigned int intr_mask, void *data, void *ipi_handler);
 
 void _ipi_handler (unsigned long ipi_base_addr, unsigned int intr_mask, void *data) {
+	(void)ipi_base_addr;
+	(void)intr_mask;
 	struct proc_vring *vring_hw = (struct proc_vring *) data;
 	platform_dcache_all_flush();
 	hil_isr(vring_hw);
 }
 
 void _ipi_handler_deinit (unsigned long ipi_base_addr, unsigned int intr_mask, void *data) {
+	(void)ipi_base_addr;
+	(void)intr_mask;
+	(void)data;
 	return;
 }
 
@@ -108,6 +113,7 @@ void _reg_ipi_after_deinit(struct proc_vring *vring_hw) {
 
 void _notify(int cpu_id, struct proc_intr *intr_info) {
 
+	(void)cpu_id;
 	struct ipi_info *chn_ipi_info = (struct ipi_info *)(intr_info->data);
 	if (chn_ipi_info == NULL)
 		return;
@@ -118,10 +124,13 @@ void _notify(int cpu_id, struct proc_intr *intr_info) {
 }
 
 int _boot_cpu(int cpu_id, unsigned int load_addr) {
+	(void)cpu_id;
+	(void)load_addr;
 	return -1;
 }
 
 void _shutdown_cpu(int cpu_id) {
+	(void)cpu_id;
 	return;
 }
 
@@ -151,5 +160,6 @@ int platform_get_processor_info(struct hil_proc *proc , int cpu_id) {
 
 int platform_get_processor_for_fw(char *fw_name) {
 
+    (void)fw_name;
     return 1;
 }
