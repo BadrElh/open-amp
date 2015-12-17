@@ -41,7 +41,6 @@
  *
  **************************************************************************/
 
-#ifdef OPENAMP_BAREMETAL
 #include "porting/env/env.h"
 #include "platform.h"
 
@@ -547,4 +546,3 @@ static void release_spin_lock(void *plock)
 
 	xchg(plock, 1);
 }
-#endif
