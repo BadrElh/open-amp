@@ -35,7 +35,7 @@
 
     @ include FIT format linux image
     .section fit_image, "a"
-	.incbin LNX_IMG;
+	.incbin "image.ub";
 
     .section    bootwrapper, "ax"
 
