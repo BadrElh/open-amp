@@ -10,7 +10,7 @@
 #include "open_amp.h"
 #include "rsc_table.h"
 #include "baremetal.h"
-#include "rpmsg_retarget.h"
+#include "rpmsg_retarget/rpmsg_retarget.h"
 
 /* Internal functions */
 static void init_system();
