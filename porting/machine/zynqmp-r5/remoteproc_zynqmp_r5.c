@@ -68,7 +68,7 @@ struct hil_platform_ops proc_ops = {
 /* Extern functions defined out from OpenAMP lib */
 extern void ipi_enable_interrupt(unsigned int vector);
 extern void ipi_isr(int vect_id, void *data);
-extern void platform_dcache_all_flush();
+extern void Xil_DCacheFlush();
 
 extern void ipi_register_interrupt(unsigned long ipi_base_addr, unsigned int intr_mask, void *data, void *ipi_handler);
 
@@ -80,7 +80,7 @@ void _ipi_handler (unsigned long ipi_base_addr, unsigned int intr_mask, void *da
 	(void)ipi_base_addr;
 	(void)intr_mask;
 	struct proc_vring *vring_hw = (struct proc_vring *) data;
-	platform_dcache_all_flush();
+	Xil_DCacheFlush();
 	hil_isr(vring_hw);
 }
 
@@ -121,7 +121,7 @@ void _notify(int cpu_id, struct proc_intr *intr_info) {
 	struct ipi_info *chn_ipi_info = (struct ipi_info *)(intr_info->data);
 	if (chn_ipi_info == NULL)
 		return;
-	platform_dcache_all_flush();
+	Xil_DCacheFlush();
 	env_wmb();
 	/* Trigger IPI */
 	ipi_trigger(chn_ipi_info->ipi_base_addr, chn_ipi_info->ipi_chn_mask);
