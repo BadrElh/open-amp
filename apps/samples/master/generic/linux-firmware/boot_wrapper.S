@@ -35,7 +35,7 @@
 
     @ include FIT format linux image
     .section fit_image, "a"
-	.incbin "libs/system/zc702evk/linux/image.ub";
+	.incbin LNX_IMG;
 
     .section    bootwrapper, "ax"
 
