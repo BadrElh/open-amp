@@ -1,0 +1,3 @@
+This directory contains kernel modules.
+It will not compile these modules, if you want to
+use these modules, please compile them with your Linux kernel.

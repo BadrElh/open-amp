@@ -1,6 +1,0 @@
-add_subdirectory (common)
-add_subdirectory (echo_test)
-add_subdirectory (matrix_multiply)
-if (WITH_PROXY)
-add_subdirectory (rpc_demo)
-endif (WITH_PROXY)

@@ -1,0 +1,4 @@
+The kernel modules in kernelspace/ and the Linux applications in userspace/
+in this directory will not be compiled with the OpenAMP lib.
+
+Please make compile them manually with your Linux kernel and your Linux distro.
