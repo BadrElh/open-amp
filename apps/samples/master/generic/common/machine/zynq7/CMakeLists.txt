@@ -1,9 +1,6 @@
 collect (APP_SOURCES platform_info.c)
 collect (APP_INC_DIRS ${CMAKE_CURRENT_SOURCE_DIR})
 collect (APP_INC_DIRS ${OPENAMP_ROOT_DIR}/obsolete/system/zynq7/generic)
-get_property (_deps GLOBAL PROPERTY "APP_LIB_DEPS")
-set (_deps "${_deps}  -lbaremetal-${PROJECT_ROLE}")
-set_property (GLOBAL PROPERTY APP_LIB_DEPS "${_deps}")
 
 set (_linker_script "${APP_LINKER_SCRIPT}")
 if ("${_linker_script}" STREQUAL "")
