@@ -1,3 +1,4 @@
+collect (PROJECT_INC_DIRS "${CMAKE_CURRENT_SOURCE_DIR}")
 include_directories (${CMAKE_CURRENT_SOURCE_DIR})
 file (GLOB C_SRCS *.c)
 file (GLOB ASM_SRCS *.S *.s)
