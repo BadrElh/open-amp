@@ -4,6 +4,7 @@
 include Makefile.commons
 
 LIB := libs/open_amp/libopen_amp.a
+include porting/os/$(OS)/platforms/$(PLAT)/Makefile.platform
 
 INCLUDES := -I"include" -I"include/porting/os/$(OS)/platforms/$(PLAT)"
 INCLUDES += -I"libs/system/$(PLAT)/$(OS)"

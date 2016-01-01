@@ -1,4 +1,4 @@
-CROSS            := arm-xilinx-eabi-
+CROSS            ?= arm-xilinx-eabi-
 CFLAGS           := -Wall -ffunction-sections -fdata-sections -O0 -g3 -MMD 
 CXXFLAGS         := -Wall -fno-enforce-eh-specs -MMD
 ASFLAGS          := -gdwarf2 -meabi=4 -mcpu=cortex-a9 -mfpu=neon
