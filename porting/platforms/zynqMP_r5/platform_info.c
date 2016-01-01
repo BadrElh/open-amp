@@ -42,6 +42,12 @@
 
 #include "platform.h"
 
+/* -- FIX ME: ipi info is to be defined -- */
+struct ipi_info {
+	uint32_t ipi_base_addr;
+	uint32_t ipi_chn_mask;
+};
+
 /* Reference implementation that show cases platform_get_cpu_info and 
  platform_get_for_firmware API implementation for Bare metal environment */
 
