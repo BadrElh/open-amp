@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2014, Mentor Graphics Corporation
  * All rights reserved.
- * Copyright (c) 2015 Xilinx, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -28,40 +27,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PLATFORM_H_
-#define PLATFORM_H_
+#ifndef FIRMWARE_H
+#define FIRMWARE_H
 
-#include <stdio.h>
-#include "../../common/hil/hil.h"
+#include "porting/env/env.h"
 
-/* ------------------------- Macros --------------------------*/
+/* Max supported firmwares */
+#define FW_COUNT                        4
 
-/********************/
-/* Register offsets */
-/********************/
-
-/* -- FIX ME: ipi info is to be defined -- */
-struct ipi_info {
-	uint32_t ipi_base_addr;
-	uint32_t ipi_chn_mask;
+struct firmware_info {
+    char name[32];
+    unsigned int start_addr;
+    unsigned int end_addr;
 };
 
-/* IPC Device parameters */
-#define SHM_ADDR                          (void *)0x3ED08000
-#define SHM_SIZE                          0x00200000
-#define IPI_BASEADDR                      0xff310000
-#define IPI_CHN_BITMASK                   0x01000000 /* IPI channel bit mask APU<->RPU0 */
-#define VRING0_IPI_INTR_VECT              -1
-#define VRING1_IPI_INTR_VECT              65
-#define MASTER_CPU_ID                     0
-#define REMOTE_CPU_ID                     1
+int config_get_firmware(char *fw_name, unsigned int *start_addr, unsigned int *size);
 
-int _enable_interrupt(struct proc_vring *vring_hw);
-void _reg_ipi_after_deinit(struct proc_vring *vring_hw);
-void _notify(int cpu_id, struct proc_intr *intr_info);
-int _boot_cpu(int cpu_id, unsigned int load_addr);
-void _shutdown_cpu(int cpu_id);
-void platform_isr(int vect_id, void *data);
-void deinit_isr(int vect_id, void *data);
-
-#endif /* PLATFORM_H_ */
+#endif

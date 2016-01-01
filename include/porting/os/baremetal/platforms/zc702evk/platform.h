@@ -31,7 +31,7 @@
 #define PLATFORM_H_
 
 #include <stdio.h>
-#include "../common/hil/hil.h"
+#include "common/hil/hil.h"
 
 /* ------------------------- Macros --------------------------*/
 #define ESAL_DP_SLCR_BASE                  0xF8000000

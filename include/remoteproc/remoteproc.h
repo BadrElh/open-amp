@@ -35,8 +35,8 @@
 #ifndef REMOTEPROC_H
 #define REMOTEPROC_H
 
-#include "../rpmsg/rpmsg.h"
-#include "../porting/config/config.h"
+#include "rpmsg/rpmsg.h"
+#include "porting/firmware/firmware.h"
 /**
  * struct resource_table - firmware resource table header
  * @ver: version number

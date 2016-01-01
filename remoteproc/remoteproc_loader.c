@@ -27,7 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "remoteproc_loader.h"
+#include "remoteproc/remoteproc_loader.h"
 
 /**
  * remoteproc_loader_init

@@ -31,7 +31,7 @@
 #ifndef ELF_LOADER_H_
 #define ELF_LOADER_H_
 
-#include "remoteproc_loader.h"
+#include "remoteproc/remoteproc_loader.h"
 
 /* ELF base types - 32-bit. */
 typedef     unsigned int          Elf32_Addr;

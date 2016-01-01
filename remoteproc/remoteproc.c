@@ -28,11 +28,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "remoteproc.h"
-#include "remoteproc_loader.h"
-#include "rsc_table_parser.h"
-#include "../porting/env/env.h"
-#include "../common/hil/hil.h"
+#include "remoteproc/remoteproc.h"
+#include "remoteproc/remoteproc_loader.h"
+#include "remoteproc/rsc_table_parser.h"
+#include "porting/env/env.h"
+#include "common/hil/hil.h"
 
 /**
  * remoteproc_resource_init
