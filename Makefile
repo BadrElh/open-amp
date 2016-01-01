@@ -1,16 +1,39 @@
 # Make file to create ipc stack library.
 
-# Include commons make file to get platform and tool chain specific variables.
-include Makefile.commons
+OPENAMP_ROOT     := $(PWD)
+BUILD            ?= $(OPENAMP_ROOT)/.build
+OS               ?= baremetal
+PLAT             ?= zc702evk
 
-LIB := libs/open_amp/libopen_amp.a
 include porting/os/$(OS)/platforms/$(PLAT)/Makefile.platform
 
-INCLUDES := -I"include" -I"include/porting/os/$(OS)/platforms/$(PLAT)"
-INCLUDES += -I"libs/system/$(PLAT)/$(OS)"
+ifeq ($(OS),baremetal)
+CFLAGS +=-D"ENV=1"
+CFLAGS +=-D"OPENAMP_BAREMETAL=1"
+
+ifeq ($(ROLE),master)
+CFLAGS+=-D"MASTER=1"
+else
+CFLAGS+=-D"MASTER=0"
+endif
+endif
+
+ifeq ($(BENCHMARK),1)
+CFLAGS+=-D"OPENAMP_BENCHMARK_ENABLE"
+endif
+
+ifeq ($(LINUXREMOTE),1)
+CFLAGS+=-D"OPENAMP_REMOTE_LINUX_ENABLE"
+endif
+
+INCLUDES := -I"$(OPENAMP_ROOT)/include" -I"$(OPENAMP_ROOT)/include/porting/os/$(OS)/platforms/$(PLAT)"
 CFLAGS += $(INCLUDES)
 
-C_SRCFILES += \
+
+OPENAMP_LIB := $(BUILD)/libopen_amp.a
+OPENAMP_RPC_LIB := $(BUILD)/libopen_amp_rpc.a
+
+OPENAMP_C_SRCFILES += \
 $(wildcard remoteproc/*.c) \
 $(wildcard virtio/*.c) \
 $(wildcard rpmsg/*.c) \
@@ -19,31 +42,31 @@ $(wildcard common/llist/*.c) \
 $(wildcard common/shm/*.c) \
 $(wildcard common/firmware/*.c) \
 $(wildcard porting/os/$(OS)/*.c) \
+$(wildcard porting/os/$(OS)/platforms/$(PLAT)/*.c) \
 $(wildcard porting/platforms/$(PLAT)/remoteproc/*.c) \
 $(wildcard porting/platforms/$(PLAT)/*.c)
 
-AS_SRCFILES += \
-$(wildcard porting/platforms/$(PLAT)/*.S)
+OPENAMP_AS_SRCFILES += \
+$(wildcard porting/$(PLAT)/*.S)
 
-OBJFILES := $(patsubst %.c, %.o, $(C_SRCFILES)) $(patsubst %.S, %.o, $(AS_SRCFILES))
+OPENAMP_OBJFILES := $(patsubst %.c, $(BUILD)/%.o, $(OPENAMP_C_SRCFILES)) $(patsubst %.S, $(BUILD)/%.o, $(OPENAMP_AS_SRCFILES))
 
-DEPFILES := $(patsubst %.c, %.d, $(C_SRCFILES)) $(patsubst %.S, %.d, $(AS_SRCFILES))
+OPENAMP_DEPFILES := $(patsubst %.c, $(BUILD)/%.d, $(OPENAMP_C_SRCFILES)) $(patsubst %.S, $(BUILD)/%.d, $(OPENAMP_AS_SRCFILES))
 
-all: $(LIB)
+all: $(OPENAMP_LIB)
 
-$(LIB): $(OBJFILES)
-	@echo AR $@
-	$(AR) -r $@ $(OBJFILES)
+$(OPENAMP_LIB): $(OPENAMP_OBJFILES)
+	$(AR) -r $@ $(OPENAMP_OBJFILES)
 
-%.o:%.c $(HEADERS)
-	@echo CC $(<:.c=.o)
+$(BUILD)/%.o:%.c
+	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(ARCH_CFLAGS) $(INCLUDE) -c $< -o $@
 
 %.o:%.S
-	@echo AS $(<:.S=.o)
+	mkdir -p $(dir $@)
 	$(AS) $(ARCH_ASFLAGS) $(INCLUDE) $< -o $@
 
 clean:
-	-$(RM) $(LIB) $(OBJFILES) $(DEPFILES)
+	rm -rf $(BUILD)
 
 PHONY: all clean
