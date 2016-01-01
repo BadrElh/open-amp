@@ -18,10 +18,10 @@ $(wildcard common/llist/*.c) \
 $(wildcard common/shm/*.c) \
 $(wildcard common/firmware/*.c) \
 $(wildcard porting/env/*.c) \
-$(wildcard porting/$(PLAT)/*.c)
+$(wildcard porting/platforms/$(PLAT)/*.c)
 
 AS_SRCFILES += \
-$(wildcard porting/$(PLAT)/*.S)
+$(wildcard porting/platforms/$(PLAT)/*.S)
 
 OBJFILES := $(patsubst %.c, %.o, $(C_SRCFILES)) $(patsubst %.S, %.o, $(AS_SRCFILES))
 
