@@ -1,5 +1,4 @@
-open-amp
-========
+# open-amp
 This repository is the home for the Open Asymmetric Multi Processing (OpenAMP)
 framework project. The OpenAMP framework provides software components that
 enable development of software applications for Asymmetric Multiprocessing
@@ -12,14 +11,77 @@ enable development of software applications for Asymmetric Multiprocessing
    environments
 3. Compatibility with upstream Linux remoteproc and rpmsg components
 4. Following AMP configurations supported
-	a. Linux master/Baremetal remote
-	b. Baremetal master/Linux remote
+	a. Linux master/Generic(Baremetal) remote
+	b. Generic(Baremetal) master/Linux remote
 5. Proxy infrastructure and supplied demos showcase ability of proxy on master
    to handle printf, scanf, open, close, read, write calls from Bare metal
    based remote contexts.
 
-Following are the known limitations:
+## OpenAMP Source Structure
+```
+|- common/     # common helper functions
+|- virtio/     # virtio implemnetation
+|- rpmsg/      # rpmsg implementation
+|- remoteproc/ # remoteproc implementation
+|- proxy/      # implement one processor access device on the
+|              # other processor with file operations
+|- porting/    # system and machine specific implementation
+|  |- machine/ # machine specific implementation
+|  |           # E.g. remoteproc implementation for the machine
+|  |- os/      # os specific implementation 
+|  |  |- generic/ # E.g. generic system (that is baremetal)
+|  |  |  |- machine/ # machine specific implmentation for the system
+|- include/     # header files
+|  |- porting/  # system and machine specific header files
+|- apps/        # demontrastion/testing applicaitons
+|  |- common/   # common files can be shared by applicaitons
+|               # It is up to each app to decide whether to use files in the
+|               # apps/common/
+|- obsolete     # It is used to build libs which may also required when
+|               # building the apps. It will be removed in future since
+|               # user can specify which libs to use when compiling the apps.
+|- cmake        # CMake files
+```
 
+OpenAMP library libopen_amp is composed of the following directorys:
+*   `common/`
+*   `virtio/`
+*   `rpmsg/`
+*   `remoteproc/`
+*   `porting/`
+
+## OpenAMP Compilation
+OpenAMP uses CMake for library and demonstration applicaiton compilation.
+
+###  Example to compile Zynq MP SoC R5 generic(baremetal) remote:
+```
+$ mkdir build
+$ cd build/
+$ cmake ../open-amp -DCMAKE_TOOLCHAIN_FILE=zynqmp-r5-generic -DWITH_OBSOLETE=ON -DWITH_APPS=ON -DPROJECT_ROLE=remote
+$ make DESTDIR=$(pwd) install
+```
+The OpenAMP library will be generated to `build/libs` directory, and the applications executables will be generated to
+`build/usr/local/bin` directory.
+
+*   `-DWITH_OBSOLETE=ON` is to build the `libxil.a`.
+*   `-DWITH_APPS=ON` is to build the demonstration applications.
+*   `-DPROJECT_ROLE=remote` is to specify to build the OpenAMP library as `remote`.
+
+###  Example to compile Zynq A9 remote:
+```
+$ mkdir build
+$ cd build/
+$ cmake ../open-amp -DCMAKE_TOOLCHAIN_FILE=zynq7-generic -DWITH_APPS=ON -DPROJECT_ROLE=remote
+$ make DESTDIR=$(pwd) install
+```
+
+## Supported System and Machines
+For now, it supports:
+* Zynq generic slave 
+* Zynq generic master
+* ZynqMP R5 generic slave
+
+## Known Limitations:
 1. In rpc_demo.c(the remote demonstration application that showcases usage of
    rpmsg retargetting infrastructure),  the bindings for the flag input
    parameter in open() system call has been redefined. The GCC tool library
