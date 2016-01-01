@@ -41,7 +41,7 @@
  *       Source file for basic linked list service.
  *
  **************************************************************************/
-#include "llist.h"
+#include "common/llist/llist.h"
 
 #define LIST_NULL  ((void *)0)
 /**

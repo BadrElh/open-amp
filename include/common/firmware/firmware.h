@@ -30,7 +30,7 @@
 #ifndef FIRMWARE_H
 #define FIRMWARE_H
 
-#include "../../porting/env/env.h"
+#include "porting/env/env.h"
 
 /* Max supported firmwares */
 #define FW_COUNT 4

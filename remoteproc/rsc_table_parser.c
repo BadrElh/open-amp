@@ -27,7 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "rsc_table_parser.h"
+#include "remoteproc/rsc_table_parser.h"
 
 /* Resources handler */
 rsc_handler rsc_handler_table[] = {
