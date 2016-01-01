@@ -17,7 +17,7 @@ $(wildcard common/hil/*.c) \
 $(wildcard common/llist/*.c) \
 $(wildcard common/shm/*.c) \
 $(wildcard common/firmware/*.c) \
-$(wildcard porting/env/*.c) \
+$(wildcard porting/os/$(OS)/*.c) \
 $(wildcard porting/platforms/$(PLAT)/*.c)
 
 AS_SRCFILES += \
