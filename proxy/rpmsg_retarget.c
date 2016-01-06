@@ -1,5 +1,5 @@
 #include "open_amp.h"
-#include "rpmsg_retarget.h"
+#include "proxy/rpmsg_retarget.h"
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
