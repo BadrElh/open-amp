@@ -40,7 +40,7 @@
  *
  **************************************************************************/
 
-#include "platform.h"
+#include "common/hil/hil.h"
 
 /* IPC Device parameters */
 #define SHM_ADDR                          (void *)0x3ED08000
