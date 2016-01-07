@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2014, Mentor Graphics Corporation
  * All rights reserved.
+ * Copyright (c) 2015 Xilinx, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -42,7 +43,8 @@ struct remote_resource_table {
 	unsigned int reserved[2];
 	unsigned int offset[NO_RESOURCE_ENTRIES];
 	/* text carveout entry */
-	struct fw_rsc_carveout elf_cout;
+	struct fw_rsc_carveout ocm_0_cout;
+	struct fw_rsc_carveout ocm_1_cout;
 	/* rpmsg vdev entry */
 	struct fw_rsc_vdev rpmsg_vdev;
 	struct fw_rsc_vdev_vring rpmsg_vring0;
