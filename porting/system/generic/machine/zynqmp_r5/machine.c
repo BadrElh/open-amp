@@ -34,7 +34,7 @@
 #include "xil_mmu.h"
 #include "xil_mpu.h"
 #include "machine.h"
-#include "porting/env/env.h"
+#include "common/env.h"
 
 XScuGic InterruptController;
 

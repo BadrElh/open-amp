@@ -42,7 +42,7 @@
  **************************************************************************/
 
 #ifdef OPENAMP_BAREMETAL
-#include "porting/env/env.h"
+#include "common/env.h"
 #include "machine.h"
 
 #include <stdlib.h>

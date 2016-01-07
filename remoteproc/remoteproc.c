@@ -31,8 +31,8 @@
 #include "remoteproc/remoteproc.h"
 #include "remoteproc/remoteproc_loader.h"
 #include "remoteproc/rsc_table_parser.h"
-#include "porting/env/env.h"
-#include "common/hil/hil.h"
+#include "common/env.h"
+#include "common/hil.h"
 
 /**
  * remoteproc_resource_init

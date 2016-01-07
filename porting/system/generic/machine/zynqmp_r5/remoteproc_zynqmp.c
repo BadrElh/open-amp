@@ -40,7 +40,7 @@
  *
  **************************************************************************/
 
-#include "common/hil/hil.h"
+#include "common/hil.h"
 
 /* -- FIX ME: ipi info is to be defined -- */
 struct ipi_info {

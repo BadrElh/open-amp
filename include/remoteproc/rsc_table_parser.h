@@ -31,8 +31,8 @@
 #define RSC_TABLE_PARSER_H
 
 #include "remoteproc/remoteproc.h"
-#include "porting/env/env.h"
-#include "common/hil/hil.h"
+#include "common/env.h"
+#include "common/hil.h"
 
 #define RSC_TAB_SUPPORTED_VERSION           1
 #define RSC_TAB_HEADER_SIZE                 12

@@ -30,72 +30,59 @@
 /**************************************************************************
  * FILE NAME
  *
- *       firmware.c
+ *       sh_mem.c
  *
  * COMPONENT
  *
- *         OpenAMP stack.
+ *         IPC Stack for uAMP systems.
  *
  * DESCRIPTION
  *
+ *       Header file for fixed buffer size memory management service. Currently
+ *       it is being used to manage shared memory.
  *
  **************************************************************************/
+#ifndef SH_MEM_H_
+#define SH_MEM_H_
 
-#include "common/firmware/firmware.h"
+#include "common/env.h"
 
-/* Start and end addresses of firmware image for remotes. These are defined in the
- * object files that are obtained by converting the remote ELF Image into object
- * files. These symbols are not used for remotes.
+/* Macros */
+#define BITMAP_WORD_SIZE         32
+#define WORD_SIZE                sizeof(unsigned long)
+#define WORD_ALIGN(a)            (((a) & (WORD_SIZE-1)) != 0)? \
+                                 (((a) & (~(WORD_SIZE-1))) + 4):(a)
+/*
+ * This structure represents a  shared memory pool.
+ *
+ * @start_addr      - start address of shared memory region
+ * @lock            - lock to ensure exclusive access
+ * @size            - size of shared memory*
+ * @buff_size       - size of each buffer
+ * @total_buffs     - total number of buffers in shared memory region
+ * @used_buffs      - number of used buffers
+ * @bmp_size        - size of bitmap array
+ * @bitmap          - array to keep record of free and used blocks
+ *
  */
-extern unsigned char _binary_firmware1_start;
-extern unsigned char _binary_firmware1_end;
 
-extern unsigned char _binary_firmware2_start;
-extern unsigned char _binary_firmware2_end;
-
-#define FIRMWARE1_START  (void *)&_binary_firmware1_start
-#define FIRMWARE1_END    (void *)&_binary_firmware1_end
-
-#define FIRMWARE2_START  (void *)&_binary_firmware2_start
-#define FIRMWARE2_END    (void *)&_binary_firmware2_end
-
-/* Init firmware table */
-
-const struct firmware_info fw_table[] = { {"firmware1",
-					   (unsigned int)FIRMWARE1_START,
-					   (unsigned int)FIRMWARE1_END},
-{"firmware2", (unsigned int)FIRMWARE2_START,
- (unsigned int)FIRMWARE2_END}
+struct sh_mem_pool {
+	void *start_addr;
+	LOCK *lock;
+	int size;
+	int buff_size;
+	int total_buffs;
+	int used_buffs;
+	int bmp_size;
+	unsigned long bitmap[0];
 };
 
-/**
- * config_get_firmware
- *
- * Searches the given firmware in firmware table list and provides
- * it to caller.
- *
- * @param fw_name    - name of the firmware
- * @param start_addr - pointer t hold start address of firmware
- * @param size       - pointer to hold size of firmware
- *
- * returns -  status of function execution
- *
- */
+/* APIs */
+struct sh_mem_pool *sh_mem_create_pool(void *start_addr, unsigned int size,
+				       unsigned int buff_size);
+void sh_mem_delete_pool(struct sh_mem_pool *pool);
+void *sh_mem_get_buffer(struct sh_mem_pool *pool);
+void sh_mem_free_buffer(void *ptr, struct sh_mem_pool *pool);
+unsigned int get_first_zero_bit(unsigned long value);
 
-int config_get_firmware(char *fw_name, unsigned int *start_addr,
-			unsigned int *size)
-{
-	int idx;
-	for (idx = 0; idx < sizeof(fw_table) / (sizeof(struct firmware_info));
-	     idx++) {
-		if (!env_strncmp((char *)fw_table[idx].name, fw_name,
-				 sizeof(fw_table[idx].name))) {
-			*start_addr = fw_table[idx].start_addr;
-			*size =
-			    fw_table[idx].end_addr - fw_table[idx].start_addr +
-			    1;
-			return 0;
-		}
-	}
-	return -1;
-}
+#endif				/* SH_MEM_H_ */

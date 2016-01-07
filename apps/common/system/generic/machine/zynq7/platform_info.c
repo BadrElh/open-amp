@@ -39,7 +39,7 @@
  *
  **************************************************************************/
 
-#include "common/hil/hil.h"
+#include "common/hil.h"
 
 /* Reference implementation that show cases platform_get_cpu_info and 
  platform_get_for_firmware API implementation for Bare metal environment */

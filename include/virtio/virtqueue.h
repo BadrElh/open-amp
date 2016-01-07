@@ -33,8 +33,8 @@
 typedef uint8_t boolean;
 
 #include "virtio/virtio_ring.h"
-#include "porting/env/env.h"
-#include "common/llist/llist.h"
+#include "common/env.h"
+#include "common/llist.h"
 
 /*Error Codes*/
 #define VQ_ERROR_BASE                                 -3000

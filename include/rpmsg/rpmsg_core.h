@@ -30,11 +30,11 @@
 #ifndef _RPMSG_CORE_H_
 #define _RPMSG_CORE_H_
 
-#include "porting/env/env.h"
+#include "common/env.h"
 #include "virtio/virtio.h"
-#include "common/hil/hil.h"
-#include "common/shm/sh_mem.h"
-#include "common/llist/llist.h"
+#include "common/hil.h"
+#include "common/sh_mem.h"
+#include "common/llist.h"
 #include "rpmsg/rpmsg.h"
 
 /* Configurable parameters */
